@@ -132,6 +132,7 @@ which gives us the following plot:
     \end{tikzpicture}
 \end{center}
 
+\newpage
 \section{}
 
 \begin{align}
@@ -141,15 +142,15 @@ which gives us the following plot:
 
 \subsection{}
 
-For the homogenuous solution, assume that \(y_h[n] = A\lambda^n\).
-Then,
-\begin{align}
-    A\lambda^n - aA\lambda^{n - 1} &= 0 \\
-    1 - a\lambda^{-1} &= 0 \\
-    \implies \lambda &= a
-    \implies y_h[n] = Aa^n
-\end{align}
-Finding the particular solution,
+% For the homogenuous solution, assume that \(y_h[n] = A\lambda^n\).
+% Then,
+% \begin{align}
+%     A\lambda^n - aA\lambda^{n - 1} &= 0 \\
+%     1 - a\lambda^{-1} &= 0 \\
+%     \implies \lambda &= a
+%     \implies y_h[n] = Aa^n
+% \end{align}
+% Finding the particular solution,
 \begin{equation}
     \begin{array}[]{||c|c||}
         \hline
@@ -163,13 +164,55 @@ Finding the particular solution,
         \hline
     \end{array}
 \end{equation}
+By induction,
+\begin{equation}
+    y[n] = \sum_{k = 0}^n a^{n - k} x[k]
+\end{equation}
+
+Finding \(T\{x[n - n_0]\}\),
+\begin{equation}
+    T\{x[n - n_0]\} = \sum_{k = 0}^{n} a^{n - k} x[k - n_0]
+\end{equation}
+Letting \(k' = k - n_0\),
+\begin{equation}
+    \sum_{k' = 0}^{n - n_0} a^{n - n_0 - k} x[k'] = y[n - n_0]
+\end{equation}
+So the system is time-invariant.
+
+\subsection{}
+
+Letting \(T\{x_1[n]\} = y_1[n]\) and \(T\{x_1[n]\} = y_2[n]\),
+\begin{align}
+    T\{\alpha x_1[n] + \beta x_2[n]\} &= \sum_{k = 0}^n a^{n - k} (\alpha x_1[k] + \beta x_2[k]) \\
+    &= \sum_{k = 0}^n a^{n - k} \alpha x_1[k] + \sum_{k = 0}^n a^{n - k} \beta x_2[k] \\
+    &= \alpha \sum_{k = 0}^n a^{n - k} x_1[n] + \beta \sum_{k = 0}^n x_2[k] = \alpha y_1[n] + \beta y_2[n]
+\end{align}
+So the system is linear.
+
+\subsection{}
+
+\begin{equation}
+    \begin{array}[]{||c|c||}
+        \hline
+        n & x[n] \\
+        \hline
+        0 & 1 \\
+        1 & x[1] = y[1] \\
+        2 & x[2] + a x[1] = y[2] \\
+        3 & x[3] + a x[2] + a^2 x[1] = y[3] \\
+        \vdots & \vdots \\
+        \hline
+    \end{array}
+\end{equation}
+By induction,
+\begin{equation}
+    y[n] = \sum_{k = 1}^n a^{n - k} x[k] = \sum_{k = 0}^n a^{n - k} x[k] - a^n x[0]
+\end{equation}
+which no longer makes the system time-invariant.
 
 %% TODO: fix this
 
-\subsection{}
-
-\subsection{}
-
+\newpage
 \section{}
 
 \begin{equation}
@@ -178,31 +221,21 @@ Finding the particular solution,
 
 \subsection{}
 
-\begin{theorem}
-    The above system is not LTI.
-\end{theorem}
-\begin{proof}
-    Proving linearity, suppose we are given the system responses \(x_1[n] \iff y_1[n]\) and \(x_2[n] \iff y_2[n]\),
-    \begin{align}
-        T\{a x_1[n] + b x_2[n]\} &= \sum_{k \geqslant 0} \frac{1}{1 + k} \cos[\omega_0 n] (a x_1[n - k] + b x_2[n - k]) \\
-        &= a \sum_{k \geqslant 0} \frac{1}{1 + k} \cos[\omega_0 n] x_1[n - k] + b \sum_{k \geqslant 0} \frac{1}{1 + k} \cos[\omega_0 n] x_2[n - k] \\
-        &= a y_1[n] + b y_2[n]
-    \end{align}
-    Consider the inputs \(x[n] = \delta[n]\) and \(n_0 = 1\),
-    \begin{align}
-        T\{\delta[n]\} &= h[n] \ast (\cos[\omega_0 n] \delta[n]) =
-        \begin{cases}
-            0 & n < 0 \\
-            \frac{1}{1 + n} \cos[\omega_0 n] & n \geqslant 0
-        \end{cases} \\
-        T\{\delta[n - 1]\} &= h[n - 1] \ast (\cos[\omega_0 n - \omega_0] \delta[n - 1]) \\
-        &= h[n - 2] \cos[\omega_0 n - \omega_0] =
-        \begin{cases}
-            0 & n < 2 \\
-            \frac{1}{n - 1} \cos[\omega_0 n - \omega_0] & n \geqslant 2
-        \end{cases} \neq y[n - 1] \\
-    \end{align}
-\end{proof}
+Consider the inputs \(x[n] = \delta[n]\) and \(n_0 = 1\),
+\begin{align}
+    T\{\delta[n]\} &= h[n] \ast (\cos[\omega_0 n] \delta[n]) =
+    \begin{cases}
+        0 & n < 0 \\
+        \frac{1}{1 + n} \cos[\omega_0 n] & n \geqslant 0
+    \end{cases} \\
+    T\{\delta[n - 1]\} &= h[n - 1] \ast (\cos[\omega_0 n - \omega_0] \delta[n - 1]) \\
+    &= h[n - 2] \cos[\omega_0 n - \omega_0] =
+    \begin{cases}
+        0 & n < 2 \\
+        \frac{1}{n - 1} \cos[\omega_0 n - \omega_0] & n \geqslant 2
+    \end{cases} \neq y[n - 1]
+\end{align}
+So the system is \emph{not} time-invariant.
 
 \subsection{}
 
@@ -216,6 +249,7 @@ due to the divergence of the harmonic series.
 
 The system is causal, since the summation in the convolution with \(h[n]\) only relies on past values of \(x[n]\).
 
+\newpage
 \section{}
 
 \subsection{}
@@ -258,6 +292,7 @@ where we use the evenness of the sinc function and the Leibniz formula for \(\pi
 
 %% TODO: probably not BIBO stable
 
+\newpage
 \section{}
 
 \begin{equation}
