@@ -5,7 +5,7 @@
 
 \DeclareMathOperator{\rect}{rect}
 
-\title{Homework 1}
+\title{Homework 01}
 \author{Bryan Ngo}
 \date{2022-01-19}
 
@@ -142,64 +142,31 @@ which gives us the following plot:
 
 \subsection{}
 
-% For the homogenuous solution, assume that \(y_h[n] = A\lambda^n\).
-% Then,
-% \begin{align}
-%     A\lambda^n - aA\lambda^{n - 1} &= 0 \\
-%     1 - a\lambda^{-1} &= 0 \\
-%     \implies \lambda &= a
-%     \implies y_h[n] = Aa^n
-% \end{align}
-% Finding the particular solution,
+By counterexample, consider \(x[n] = \delta[n]\) and \(n = 1\),
 \begin{equation}
-    \begin{array}[]{||c|c||}
-        \hline
-        n & x[n] \\
-        \hline
-        0 & 1 \\
-        1 & x[1] + a = y[1] \\
-        2 & x[2] + a x[1] + a^2 = y[2] \\
-        3 & x[3] + a x[2] + a^2 x[1] = y[3] \\
-        \vdots & \vdots \\
-        \hline
-    \end{array}
+    y[1] = a
 \end{equation}
-By induction,
+Then, consider \(x[n - 1] = \delta[n - 1]\) and \(n = 1\),
 \begin{equation}
-    y[n] = \sum_{k = 0}^n a^{n - k} x[k]
+    y[1] - a y[0] = \delta[0] \implies y[1] = 1 + a
 \end{equation}
-
-Finding \(T\{x[n - n_0]\}\),
-\begin{equation}
-    T\{x[n - n_0]\} = \sum_{k = 0}^{n} a^{n - k} x[k - n_0]
-\end{equation}
-Letting \(k' = k - n_0\),
-\begin{equation}
-    \sum_{k' = 0}^{n - n_0} a^{n - n_0 - k} x[k'] = y[n - n_0]
-\end{equation}
-So the system is time-invariant.
+So the system is not time-invariant.
 
 \subsection{}
 
-Letting \(T\{x_1[n]\} = y_1[n]\) and \(T\{x_1[n]\} = y_2[n]\),
-\begin{align}
-    T\{\alpha x_1[n] + \beta x_2[n]\} &= \sum_{k = 0}^n a^{n - k} (\alpha x_1[k] + \beta x_2[k]) \\
-    &= \sum_{k = 0}^n a^{n - k} \alpha x_1[k] + \sum_{k = 0}^n a^{n - k} \beta x_2[k] \\
-    &= \alpha \sum_{k = 0}^n a^{n - k} x_1[n] + \beta \sum_{k = 0}^n x_2[k] = \alpha y_1[n] + \beta y_2[n]
-\end{align}
-So the system is linear.
+Given the initial condition \(y[0] = 1\), our system is affine, but not linear, since all linear systems cross the origin.
 
 \subsection{}
 
 \begin{equation}
     \begin{array}[]{||c|c||}
         \hline
-        n & x[n] \\
+        n & y[n] \\
         \hline
-        0 & 1 \\
-        1 & x[1] = y[1] \\
-        2 & x[2] + a x[1] = y[2] \\
-        3 & x[3] + a x[2] + a^2 x[1] = y[3] \\
+        0 & 0 \\
+        1 & x[1] \\
+        2 & x[2] + a x[1] \\
+        3 & x[3] + a x[2] + a^2 x[1] \\
         \vdots & \vdots \\
         \hline
     \end{array}
@@ -208,9 +175,7 @@ By induction,
 \begin{equation}
     y[n] = \sum_{k = 1}^n a^{n - k} x[k] = \sum_{k = 0}^n a^{n - k} x[k] - a^n x[0]
 \end{equation}
-which no longer makes the system time-invariant.
-
-%% TODO: fix this
+The system is still not time-invariant, but it is now linear due to the initial condition \(y[0] = 0\).
 
 \newpage
 \section{}
@@ -220,34 +185,32 @@ which no longer makes the system time-invariant.
 \end{equation}
 
 \subsection{}
-
-Consider the inputs \(x[n] = \delta[n]\) and \(n_0 = 1\),
+Proving linearity, suppose we are given the system responses \(x_1[n] \iff y_1[n]\) and \(x_2[n] \iff y_2[n]\),
 \begin{align}
-    T\{\delta[n]\} &= h[n] \ast (\cos[\omega_0 n] \delta[n]) =
-    \begin{cases}
-        0 & n < 0 \\
-        \frac{1}{1 + n} \cos[\omega_0 n] & n \geqslant 0
-    \end{cases} \\
-    T\{\delta[n - 1]\} &= h[n - 1] \ast (\cos[\omega_0 n - \omega_0] \delta[n - 1]) \\
-    &= h[n - 2] \cos[\omega_0 n - \omega_0] =
-    \begin{cases}
-        0 & n < 2 \\
-        \frac{1}{n - 1} \cos[\omega_0 n - \omega_0] & n \geqslant 2
-    \end{cases} \neq y[n - 1]
+    T\{ax_1[n] + bx_2[n]\} &= h[n] \ast (\cosine[\omega_0 n] (ax_1[n] + bx_2[n])) \\
+    &= h[n] \ast (\cos[\omega_0 n] ax_1[n] + \cos[\omega_0 n] bx_2[n]) \\
+    &= a (h[n] \ast \cos[\omega_0 n] x_1[n]) + b (h[n] \ast \cos[\omega_0 n] x_2[n]) \\
+    &= ay_1[n] + by_2[n]
 \end{align}
-So the system is \emph{not} time-invariant.
+For time invariance,
+\begin{align}
+    T\{x[n - n_0]\} &= h[n] \ast (\cosine[\omega_0 n] x[n - n_0]) \\
+    y[n - n_0] &= h[n - n_0] \ast (\cosine[\omega_0 (n - n_0)] x[n - n_0])
+\end{align}
+The two are clearly not the same, so our system is not time invariant and thus not LTI.
 
 \subsection{}
 
-The system is not BIBO stable, since if \(|x[n]| < B_x\), then
+We can bound the cosine function with 1.
+Similar to Example 2.18 in Oppenheim \& Schafer, if \(|x[n]| < B_x\),
 \begin{equation}
-    |y[n]| = \sum_{k \geqslant 0} \frac{1}{1 + k} B_x \not< \infty
+    |y[n]| = \sum_{k \geqslant 0} \frac{1}{1 + k} B_x = B_x \sum_{k \geqslant 1} \frac{1}{k}
 \end{equation}
-due to the divergence of the harmonic series.
+which is a divergent harmonic series.
 
 \subsection{}
 
-The system is causal, since the summation in the convolution with \(h[n]\) only relies on past values of \(x[n]\).
+The system is causal since the \(y[n]\) consists of a memoryless multiplication by the cosine function and convolution with a causal LTI system, which is overall causal.
 
 \newpage
 \section{}
@@ -256,14 +219,16 @@ The system is causal, since the summation in the convolution with \(h[n]\) only 
 
 We can model the frequency response as
 \begin{equation}
-    H(e^{j \omega}) = \rect\left(\frac{\omega}{\pi}\right)
+    H(e^{j \omega}) =
+    \begin{cases}
+        1 & \omega < \frac{\pi}{2} \\
+        0 & \text{elsewhere}
+    \end{cases}
 \end{equation}
-Finding the inverse Fourier transform,
-\begin{align}
-    h[n] &= \frac{1}{2\pi} \int_{-\pi}^\pi H(e^{j \omega}) e^{j \omega n} \, d\omega \\
-    &= \frac{1}{2\pi} \int_{-\frac{\pi}{2}}^{\frac{\pi}{2}} e^{j \omega n} \, d\omega = \frac{1}{2\pi} \eval{\frac{e^{j \omega n}}{jn}}_{-\frac{\pi}{2}}^{\frac{\pi}{2}} \\
-    &= \frac{1}{2\pi j n} \left(e^{j \frac{\pi}{2} n} - e^{-j \frac{\pi}{2} n}\right) = \frac{\sin\left[\frac{\pi}{2} n\right]}{\pi n}
-\end{align}
+Finding the inverse Fourier transform, we can use Table 2.3 from Oppenheim \& Schafer to find that the impulse response is
+\begin{equation}
+    h[n] = \frac{\sine\left[\frac{\pi}{2} n\right]}{\pi n}
+\end{equation}
 
 \subsection{}
 
@@ -271,26 +236,27 @@ The system is not causal, since \(h[-1] = \frac{1}{\pi} \neq 0\).
 
 \subsection{}
 
-\begin{equation}
-    \begin{array}[]{||c|c||}
-        \hline
-        n & h[n] \\
-        \hline
-        0 & \frac{1}{\pi} \\
-        1 & \frac{1}{\pi} \\
-        3 & -\frac{1}{3\pi} \\
-        5 & \frac{1}{5\pi} \\
-        \vdots & \vdots \\
-        \hline
-    \end{array}
-\end{equation}
-The system is BIBO stable, since
-\begin{equation}
-    \sum_{k = -\infty}^\infty |h[k]| = \frac{1}{\pi} + \frac{2}{\pi} \underbrace{\left(1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \cdots\right)}_{\frac{\pi}{4}} = \frac{1}{\pi} + \frac{1}{2} < \infty
-\end{equation}
-where we use the evenness of the sinc function and the Leibniz formula for \(\pi\).
-
-%% TODO: probably not BIBO stable
+% \begin{equation}
+%     \begin{array}[]{||c|c||}
+%         \hline
+%         n & h[n] \\
+%         \hline
+%         0 & \frac{1}{\pi} \\
+%         1 & \frac{1}{\pi} \\
+%         3 & -\frac{1}{3\pi} \\
+%         5 & \frac{1}{5\pi} \\
+%         \vdots & \vdots \\
+%         \hline
+%     \end{array}
+% \end{equation}
+% The system is BIBO stable, since
+% \begin{equation}
+%     \sum_{k = -\infty}^\infty |h[k]| = \frac{1}{\pi} + \frac{2}{\pi} \underbrace{\left(1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \cdots\right)}_{\frac{\pi}{4}} = \frac{1}{\pi} + \frac{1}{2} < \infty
+% \end{equation}
+% where we use the evenness of the sinc function and the Leibniz formula for \(\pi\).
+This is a specific case of Example 2.18 in Oppenheim \& Schafer.
+Each term of the absolute sum of the sinc function only decreases on the order of \(\frac{1}{n}\), so we can treat the sum as the harmonic sum, which diverges.
+Thus, the low pass filter is not BIBO stable.
 
 \newpage
 \section{}
@@ -301,18 +267,13 @@ where we use the evenness of the sinc function and the Leibniz formula for \(\pi
 
 \subsection{}
 
-\begin{align}
-    T\{e^{j \omega n}\} &= \frac{1}{6} \sum_{k = 0}^5 e^{j \omega (n - k)} \\
-    &= \frac{1}{6} \sum_{k = 0}^5 e^{j \omega n} e^{-j \omega k} = e^{j \omega n} \left(\frac{1}{6} \sum_{k = 0}^5 e^{-j \omega k}\right) \\
-    \implies H(e^{j \omega}) &= \frac{1}{6} \sum_{k = 0}^5 e^{-j \omega k}
-\end{align}
 Using Equation 2.123 from Oppenheim \& Schafer with \(M_2 = 5\),
 \begin{align}
     H(e^{j \omega}) &= \frac{1}{6} \frac{\sin(3\omega)}{\sin\left(\frac{\omega}{2}\right)} e^{-j \frac{5}{2} \omega} \\
     |H(e^{j \omega})| &= \frac{1}{6} \left|\frac{\sin(3\omega)}{\sin\left(\frac{\omega}{2}\right)}\right| \\
-    \angle H(e^{j \omega}) &= \angle \sin(3 \omega) - \angle \sin\left(\frac{\omega}{2}\right) - \frac{5}{2} \omega
+    \angle H(e^{j \omega}) &= -\frac{5}{2} \omega \\
 \end{align}
-The zero crossings are \(\omega = \frac{k\pi}{3}\) for \(k \in \Z\).
+The zero crossings are \(\omega = \frac{k\pi}{3}\) for \(k \in \Z\), by solving for the equation \(\sin(3\omega) = 0\).
 \begin{center}
     \begin{tikzpicture}
         \begin{axis}[
@@ -328,6 +289,137 @@ The zero crossings are \(\omega = \frac{k\pi}{3}\) for \(k \in \Z\).
         ]{q6a-mag.csv};
         \end{axis}
     \end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel=\(\omega\), ylabel={\(\angle H(e^{j \omega})\)},
+            title={Phase of Frequency Response},
+            axis lines=middle,
+            width=0.4\textwidth
+        ]
+        \addplot[color=blue] table[
+            col sep=comma,
+            x=n, y=q6a-ang
+        ]{q6a-ang.csv};
+        \end{axis}
+    \end{tikzpicture}
 \end{center}
+
+\subsection{}
+
+We let \(\omega_1 = \frac{\pi}{3}\).
+Then, the output \(y[n]\) is as shown:
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel=\(n\), ylabel={\(y[n]\)},
+            title={Convolution Sum},
+            axis lines=middle,
+            width=0.4\textwidth
+        ]
+        \addplot[ycomb, mark=*, color=blue] table[
+            col sep=comma,
+            x=n, y=q6b
+        ]{q6b.csv};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+The explanation for the transient comes from the initial spike that dominates the MAF.
+
+\newpage
+\section{}
+
+\begin{equation}
+    y[n] = \mathcal{P}\{x[n - 2], x[n - 1], x[n], x[n + 1], x[n + 2]\}
+\end{equation}
+
+\subsection{}
+
+We can transform the problem into a least-squares problem:
+\begin{equation}
+    \begin{bmatrix}
+        x[-2] \\
+        x[-1] \\
+        x[0] \\
+        x[1] \\
+        x[2]
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        1 & -2 & 4 \\
+        1 & -1 & 1 \\
+        1 & 0 & 0 \\
+        1 & 1 & 1 \\
+        1 & 2 & 4
+    \end{bmatrix}
+    \begin{bmatrix}
+        a_0 \\
+        a_1 \\
+        a_2
+    \end{bmatrix}
+\end{equation}
+By the least squares formula \(\bm{\hat{a}} = (\bm{P}^\top \bm{P})^{-1} \bm{P}^\top \bm{x}\), we get that
+\begin{align}
+    \begin{bmatrix}
+        a_0 \\
+        a_1 \\
+        a_2
+    \end{bmatrix}
+    &=
+    \frac{1}{35} \begin{bmatrix}
+        -3 & 12 & 17 & 12 & -3 \\
+        -7 & -3.5 & 0 & 3.5 & 7 \\
+        5 & -2.5 & -5 & -2.5 & 5
+    \end{bmatrix}
+    \begin{bmatrix}
+        x[-2] \\
+        x[-1] \\
+        x[0] \\
+        x[1] \\
+        x[2]
+    \end{bmatrix} \\
+    \implies y[0] &= a_0 = \frac{1}{35} (-3x[-2] + 12x[-1] + 17x[0] + 12x[1] - 3x[2])
+\end{align}
+
+\subsection{}
+
+\begin{equation}
+    \begin{bmatrix}
+        x[-1] \\
+        x[0] \\
+        x[1] \\
+        x[2] \\
+        x[3]
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        1 & -2 & 4 \\
+        1 & -1 & 1 \\
+        1 & 0 & 0 \\
+        1 & 1 & 1 \\
+        1 & 2 & 4
+    \end{bmatrix}
+    \begin{bmatrix}
+        a_0 \\
+        a_1 \\
+        a_2
+    \end{bmatrix}
+\end{equation}
+which gives us the solution
+\begin{equation}
+    y[1] = a_0 = \frac{1}{35} (-3x[-1] + 12x[0] + 17x[1] + 12x[2] - 3x[3])
+\end{equation}
+
+\subsection{}
+
+The system is linear since it entirely consists of additions and scalar multiplications.
+The system is time-invariant since for any shift \(n_0\), the corresponding \(x[n - n_0]\) is simply shifted and put into the solution, which is what is expected from a time-shifted output.
+The system is stable since if \(x[n]\) is bounded by \(B_x\), \(y[n]\) is bounded by \(B_x\).
+Since the system is LTI, the system has a frequency response.
+We do not actually need to perform a regression for every \(n\), since the coefficient matrix multiplying the set of \(x[n - k]\) is constant.
+
+\subsection{}
+
+We can see that points further from the operating point have the largest weights, while weights further away have smaller and even negative weights.
+This means that it better represents a distribution at a given range.
 
 \end{document}
