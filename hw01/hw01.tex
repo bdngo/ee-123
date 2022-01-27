@@ -195,7 +195,7 @@ which is a divergent harmonic series.
 
 \subsection{}
 
-The system is causal since the \(y[n]\) consists of a memoryless multiplication by the cosine function and convolution with a causal LTI system, which is overall causal.
+The system is causal since the \(y[n]\) consists of a memoryless multiplication by a cosine function and convolution with a causal LTI system, which makes the system overall causal.
 
 \newpage
 \section{}
@@ -206,14 +206,16 @@ We can model the frequency response as
 \begin{equation}
     H(e^{j \omega}) =
     \begin{cases}
-        1 & \omega < \frac{\pi}{2} \\
+        1 & |\omega| < \frac{\pi}{2} \\
         0 & \text{elsewhere}
     \end{cases}
 \end{equation}
-Finding the inverse Fourier transform, we can use Table 2.3 from Oppenheim \& Schafer to find that the impulse response is
-\begin{equation}
-    h[n] = \frac{\sine\left[\frac{\pi}{2} n\right]}{\pi n}
-\end{equation}
+Finding the inverse Fourier transform,
+\begin{align}
+    h[n] &= \frac{1}{2\pi} \int_{-\pi}^\pi H(e^{j \omega}) e^{j \omega n} \, d\omega \\
+    &= \frac{1}{2\pi} \int_{-\frac{\pi}{2}}^{\frac{\pi}{2}} e^{j \omega n} \, d\omega = \frac{1}{2\pi} \eval{\frac{e^{j \omega n}}{jn}}_{-\frac{\pi}{2}}^{\frac{\pi}{2}} \\
+    &= \frac{1}{2\pi j n} \left(e^{j \frac{\pi}{2} n} - e^{-j \frac{\pi}{2} n}\right) = \frac{\sin\left[\frac{\pi}{2} n\right]}{\pi n}
+\end{align}
 
 \subsection{}
 
@@ -234,7 +236,7 @@ Thus, the low pass filter is not BIBO stable.
 
 \subsection{}
 
-Using Equation 2.123 from Oppenheim \& Schafer with \(M_2 = 5\),
+Using Equation 2.123 from Oppenheim \& Schafer with \(M = 5\),
 \begin{align}
     H(e^{j \omega}) &= \frac{1}{6} \frac{\sin(3\omega)}{\sin\left(\frac{\omega}{2}\right)} e^{-j \frac{5}{2} \omega} \\
     |H(e^{j \omega})| &= \frac{1}{6} \left|\frac{\sin(3\omega)}{\sin\left(\frac{\omega}{2}\right)}\right| \\
@@ -381,7 +383,7 @@ which gives us the solution
 \subsection{}
 
 The system is linear since it entirely consists of additions and scalar multiplications.
-The system is time-invariant since for any shift \(n_0\), the corresponding \(x[n - n_0]\) is simply shifted and put into the solution, which is what is expected from a time-shifted output.
+The system is time-invariant since for any shift \(n_0\), the corresponding \(x[n - n_0]\) is simply shifted and put into the solution, which is what is expected for a time-shifted output.
 The system is stable since if \(x[n]\) is bounded by \(B_x\), \(y[n]\) is bounded by \(B_x\).
 Since the system is LTI, the system has a frequency response.
 We do not actually need to perform a regression for every \(n\), since the coefficient matrix multiplying the set of \(x[n - k]\) is constant.
@@ -389,6 +391,6 @@ We do not actually need to perform a regression for every \(n\), since the coeff
 \subsection{}
 
 We can see that points further from the operating point have the largest weights, while weights further away have smaller and even negative weights.
-This means that it better represents a distribution at a given range.
+This means that it better represents a distribution around a local region, and does not flatten out features as drastically as a standard MAF.
 
 \end{document}
