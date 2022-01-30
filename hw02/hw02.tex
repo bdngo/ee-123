@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage{eecstex}
+
+\title{EE 123 HW 02}
+\author{Bryan Ngo}
+\date{2022-01-29}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{section}{2}
+
+\section{}
+
+\begin{equation}
+    a^n u[n] \iff \frac{1}{1 - ae^{-j \omega}}, \ |a| < 1
+\end{equation}
+
+\subsection{}
+
+\begin{equation}
+    x[n] = -b^n u[-n - 1] =
+    \begin{cases}
+        -b^n & n \leqslant -1 \\
+        0 & n \geqslant 0
+    \end{cases}
+\end{equation}
+Using the definition of the DTFT,
+\begin{align}
+    X(e^{j \omega}) &= \sum_{k \in \Z} -b^k u[-k - 1] e^{-j \omega k} \\
+    &= -\sum_{k \leqslant -1} b^k e^{-j \omega k}
+\end{align}
+Letting \(k' = -k\),
+\begin{align}
+    X(e^{j \omega}) &= \sum_{k' \geqslant 1} -b^{-k'} e^{j \omega k'} \\
+    &= \sum_{k \geqslant 0} -(b^{-1} e^{j \omega})^k - 1 \\
+    &= 1 - \frac{1}{1 - b e^{j \omega}} \\
+    &= \frac{\cancel{1} - b e^{j \omega} - \cancel{1}}{1 - b e^{j \omega}} \cdot \frac{-b e^{-j \omega}}{-b e^{-j \omega}} \\
+    &= \frac{1}{1 - b e^{-j \omega}}
+\end{align}
+where \(|b^{-1}| < 1 \implies |b| > 1\).
+
+\subsection{}
+
+\begin{align}
+    Y(e^{j \omega}) &= 2e^{-j \omega} \frac{1}{1 - (-2) e^{-j \omega}} \\
+    \overset{\mathcal{F}^{-1}}{\implies} y[n] &= 2 (-(-2)^{n - 1} u[-(n - 1) - 1]) \\
+    &= (-2)^n u[-n]
+\end{align}
+
+\newpage
+\section{}
+
+\begin{equation}
+    H(z) = \frac{1 - z^{-1}}{1 - 0.25z^{-2}} = \frac{1 - z^{-1}}{(1 - 0.5z^{-1}) (1 + 0.5z^{-1})}
+\end{equation}
+
+\subsection{}
+
+Using the Z-transform multiplication property,
+\begin{equation}
+    Y(z) = H(z) X(z) = \frac{\cancel{1 - z^{-1}}}{(1 - 0.5z^{-1}) (1 + 0.5z^{-1}) \cancel{(1 - z^{-1})}} = \frac{1}{(1 - 0.5z^{-1}) (1 + 0.5z^{-1})}
+\end{equation}
+Then, using partial fraction decomposition,
+\begin{align}
+    Y(z) &= \frac{1}{(1 - 0.5z^{-1}) (1 + 0.5z^{-1})} = \frac{A}{1 - 0.5z^{-1}} + \frac{B}{1 + 0.5z^{-1}} \\
+    &= 1 = A(1 + 0.5z^{-1}) + B(1 - 0.5z^{-1}) \\
+\end{align}
+Letting \(z = -0.5\), we get \(B = \frac{1}{2}\).
+Letting \(z = 0.5\), we get \(A = \frac{1}{2}\).
+Then,
+\begin{align}
+    Y(z) &= \frac{1}{2} \frac{1}{1 - 0.5z^{-1}} + \frac{1}{2} \frac{1}{1 + 0.5z^{-1}} \\
+    \overset{\mathcal{Z}^{-1}}{\implies} y[n] &= \frac{1}{2} \left(\frac{1}{2}\right)^n u[n] + \frac{1}{2} \left(-\frac{1}{2}\right)^n u[n]
+\end{align}
+
+\subsection{}
+
+\begin{equation}
+    y[n] = \delta[n] - \delta[n - 1] \overset{\mathcal{Z}}{\implies} Y(z) = 1 - z^{-1} = H(z) X(z)
+\end{equation}
+meaning that \(X(z) = 1 - 0.25z^{-2} = (1 - 0.5z^{-1}) (1 + 0.5z^{-1})\).
+By the convolution property of the Z-transform,
+\begin{equation}
+    x[n] = \left(\left(\frac{1}{2}\right)^n u[n]\right) \ast \left(\left(-\frac{1}{2}\right)^n u[n]\right)
+\end{equation}
+
+\subsection{}
+
+\begin{equation}
+    y[n] = \cos(0.5\pi n) \overset{\mathcal{Z}}{\implies} Y(z) = 1 - z^{-1} = H(z) X(z)
+\end{equation}
+meaning that \(X(z) = 1 - 0.25z^{-2} = (1 - 0.5z^{-1}) (1 + 0.5z^{-1})\).
+
+\end{document}
