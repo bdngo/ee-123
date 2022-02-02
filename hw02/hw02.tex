@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{eecstex}
+\usepackage{pgfplots}
 
 \title{EE 123 HW 02}
 \author{Bryan Ngo}
@@ -97,6 +98,7 @@ Meaning that the final output is
     y[n] = 0.8 \sqrt{2} \cos\left(0.5 \pi n + \frac{\pi}{4}\right)
 \end{equation}
 
+\newpage
 \section{}
 
 \begin{align}
@@ -116,6 +118,8 @@ Meaning that the final output is
     R_y: \frac{1}{2} < |z| < 2
 \end{equation}
 
+%% TODO: this
+
 \subsection{}
 
 Simplifiying \(X(z)\),
@@ -133,17 +137,194 @@ Simplifiying \(X(z)\),
     H(z) = \frac{Y(z)}{X(z)} = 1 - z^{-2} \overset{\mathcal{Z}^{-1}}{\implies} h[n] = \delta[n] - \delta[n - 2]
 \end{equation}
 
-\subsection{}
+\newpage
+\section{}
 
 \begin{align}
     X(z) &= \frac{z^{-2}}{1 - 2.3z^{-1} + 1.6z^{-2} - 0.3z^{-3}} = \frac{2.04}{1 + 0.3z^{-1}} - \frac{3.47}{1 - z^{-1}} + \frac{1.43}{(1 - z^{-1})^2} \\
     \overset{\mathcal{Z}^{-1}}{\implies} x[n] &= (-0.3)^n u[n] - 3.47 u[n] + (n + 1) u[n + 1]
 \end{align}
 
+\newpage
 \section{}
 
 \begin{enumerate}
-    \item % TODO
+    \item System A, causal, stable, ROC: \(|z| > 0.9\)
+    \item System B, non-causal, stable, ROC: \(|z| < 1.111\)
+    \item System A, non-causal, unstable, ROC: \(|z| < 0.9\)
 \end{enumerate}
+
+\newpage
+\section{}
+
+\begin{equation}
+    Z(e^{j \omega}) = \frac{1}{2\pi} \int_{-\pi}^\pi X(e^{j \theta}) Y(e^{j (\omega - \theta)}) \, d\theta
+\end{equation}
+
+\subsection{}
+
+\begin{align}
+    Y(e^{j \omega}) &= \pi \sum_{k = -\infty}^\infty \delta(\omega - \pi + 2\pi k) + \delta(\omega + \pi + 2\pi k) \\
+    X(e^{j \omega}) \ast Y(e^{j \omega}) &= \frac{1}{2} \int_{-\pi}^\pi X(e^{j \theta}) \sum_{k \in \Z} \delta((\omega - \theta) - \pi + 2\pi k) + \delta((\omega - \theta) + \pi + 2\pi k) \, d\theta \\
+    &= \frac{1}{2} \sum_{k \in \Z} \int_{-\pi}^\pi X(e^{j \omega}) (\delta(\omega - \theta - \pi + 2\pi k) + \delta(\omega + \theta + \pi + 2\pi k)) \, d\theta \\
+    &= \frac{1}{2} \sum_{k \in \Z} (X(e^{j (\omega - \pi + 2\pi k)}) + X(e^{j (\omega + \pi + 2\pi k)}))
+\end{align}
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel={\(\frac{\omega}{\pi}\)}, ylabel={\(Z(e^{j \omega})\)},
+            title={DTFT of Product},
+            axis lines=middle,
+        ]
+        \addplot[color=blue] table[
+            col sep=comma,
+            x=index, y=8a
+        ]{q8.csv};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+\subsection{}
+
+\begin{align}
+    Y(e^{j \omega}) &= \pi \sum_{k = -\infty}^\infty \delta\left(\omega - \frac{\pi}{2} + 2\pi k\right) + \delta\left(\omega + \frac{\pi}{2} + 2\pi k\right) \\
+    X(e^{j \omega}) \ast Y(e^{j \omega}) &= \frac{1}{2} \sum_{k \in \Z} \left(X\left(e^{j \left(\omega - \frac{\pi}{2} + 2\pi k\right)}\right) + X\left(e^{j \left(\omega + \frac{\pi}{2} + 2\pi k\right)}\right)\right)
+\end{align}
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel={\(\frac{\omega}{\pi}\)}, ylabel={\(Z(e^{j \omega})\)},
+            title={DTFT of Product},
+            axis lines=middle,
+            % xticklabels={
+            %     \(-\frac{5\pi}{2}\),
+            %     \(-2\pi\),
+            %     \(-\frac{3\pi}{2}\),
+            %     \(-\pi\),
+            %     \(-\frac{\pi}{2}\),
+            %     \(0\),
+            %     \(\frac{\pi}{2}\),
+            %     \(\pi\),
+            %     \(\frac{3\pi}{2}\),
+            %     \(2\pi\),
+            %     \(\frac{5\pi}{2}\)
+            % }
+        ]
+        \addplot[color=blue] table[
+            col sep=comma,
+            x=index, y=8b
+        ]{q8.csv};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+\subsection{}
+
+\begin{align}
+    Y(e^{j \omega}) &= \pi \sum_{k = -\infty}^\infty \delta\left(\omega - \frac{\pi}{4} + 2\pi k\right) + \delta\left(\omega + \frac{\pi}{4} + 2\pi k\right) + \delta\left(\omega - \frac{3\pi}{4} + 2\pi k\right) \delta\left(\omega + \frac{3\pi}{4} + 2\pi k\right) \\
+    X(e^{j \omega}) \ast Y(e^{j \omega}) &= \frac{1}{2} \sum_{k \in \Z} \left(X\left(e^{j \left(\omega - \frac{\pi}{2} + 2\pi k\right)}\right) + X\left(e^{j \left(\omega + \frac{\pi}{2} + 2\pi k\right)}\right)\right)
+\end{align}
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel={\(\frac{\omega}{\pi}\)}, ylabel={\(Z(e^{j \omega})\)},
+            title={DTFT of Product},
+            axis lines=middle,
+            % xticklabels={
+            %     \(-\frac{5\pi}{2}\),
+            %     \(-2\pi\),
+            %     \(-\frac{3\pi}{2}\),
+            %     \(-\pi\),
+            %     \(-\frac{\pi}{2}\),
+            %     \(0\),
+            %     \(\frac{\pi}{2}\),
+            %     \(\pi\),
+            %     \(\frac{3\pi}{2}\),
+            %     \(2\pi\),
+            %     \(\frac{5\pi}{2}\)
+            % }
+        ]
+        \addplot[color=blue] table[
+            col sep=comma,
+            x=index, y=8c
+        ]{q8c.csv};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+\subsection{}
+
+\begin{align}
+    Y(e^{j \omega}) &= \pi \sum_{k = -\infty}^\infty \cancelto{1}{e^{j \frac{\pi}{2}}} \delta(\omega - \pi + 2\pi k) + \cancelto{-1}{e^{-j \frac{\pi}{2}}} \delta(\omega + \pi + 2\pi k) \\
+    X(e^{j \omega}) \ast Y(e^{j \omega}) &= \frac{1}{2} \sum_{k \in \Z} (X(e^{j (\omega - \pi + 2\pi k)}) - X(e^{j (\omega + \pi + 2\pi k)}))
+\end{align}
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel={\(\frac{\omega}{\pi}\)}, ylabel={\(Z(e^{j \omega})\)},
+            title={DTFT of Product},
+            axis lines=middle,
+            % xticklabels={
+            %     \(-\frac{5\pi}{2}\),
+            %     \(-2\pi\),
+            %     \(-\frac{3\pi}{2}\),
+            %     \(-\pi\),
+            %     \(-\frac{\pi}{2}\),
+            %     \(0\),
+            %     \(\frac{\pi}{2}\),
+            %     \(\pi\),
+            %     \(\frac{3\pi}{2}\),
+            %     \(2\pi\),
+            %     \(\frac{5\pi}{2}\)
+            % }
+        ]
+        \addplot[color=blue] table[
+            col sep=comma,
+            x=index, y=8d
+        ]{q8.csv};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+\newpage
+\section{}
+
+\begin{equation}
+    H(e^{j \omega}) =
+    \begin{cases}
+        j & \omega \in (-\pi, 0) \\
+        0 & \omega = 0 \\
+        -j & \omega \in (0, \pi)
+    \end{cases}
+\end{equation}
+
+\subsection{}
+
+The Hilbert filter is odd-symmetric, Hermitian, and complex.
+
+\subsection{}
+
+\begin{align}
+    % X(e^{j \omega}) &= \pi \sum_{k \in \Z} \delta(\omega - \omega_0 + 2\pi k) + \delta(\omega + \omega_0 + 2\pi k) \\
+    % Y(e^{j \omega}) = H(e^{j \omega}) X(e^{j \omega}) &= j \pi \sum_{k < 0} \delta(\omega + \omega_0 + 2\pi k) - j \pi \sum_{k > 0} \delta(\omega - \omega_0 + 2\pi k) \\
+    % &= j \pi \frac{1}{2} \left(\left(\sum_{k \in \Z} \delta(\omega + \omega_0 + 2\pi k)\right) - \delta(\omega + \omega_0)\right) - j \pi \frac{1}{2} \left(\left(\sum_{k \in \Z} \delta(\omega - \omega_0 + 2\pi k)\right) - \delta(\omega - \omega_0)\right) \\
+    % &= \frac{j \pi}{2} (-\delta(\omega + \omega_0) + \delta(\omega - \omega_0)) \\
+    % \overset{\mathcal{F}^{-1}}{\implies} y[n] &= -\frac{1}{2} \sin(\omega_0 n)
+    X(e^{j \omega}) &= \pi (\delta(\omega - \omega_0) + \delta(\omega + \omega_0)) \\
+    Y(e^{j \omega}) &= j \pi (-\delta(\omega - \omega_0) + \delta(\omega_0)) \\
+    \overset{\mathcal{F}^{-1}}{\implies} y[n] &= 2\sin(\omega_0 n)
+\end{align}
+
+\subsection{}
+
+\begin{align}
+    Y(e^{j \omega}) &= H(e^{j \omega})^2 X(e^{j \omega}) =
+    \begin{cases}
+        -X(e^{j \omega}) & \omega \in (-\pi, 0) \\
+        0 & \omega = 0 \\
+        X(e^{j \omega}) & \omega \in (0, \pi)
+    \end{cases} = X(e^{j \omega}) (u(\omega) - u(\omega)) \\
+    \overset{\mathcal{F}^{-1}}{\implies} y[n] &= x[n] \ast 
+\end{align}
 
 \end{document}
