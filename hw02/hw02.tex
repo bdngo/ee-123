@@ -59,7 +59,7 @@ where \(|b^{-1}| < 1 \implies |b| > 1\).
 
 \subsection{}
 
-Using the Z-transform multiplication property,
+Using the \(z\)-transform multiplication property,
 \begin{equation}
     Y(z) = H(z) X(z) = \frac{\cancel{1 - z^{-1}}}{(1 - 0.5z^{-1}) (1 + 0.5z^{-1}) \cancel{(1 - z^{-1})}} = \frac{1}{(1 - 0.5z^{-1}) (1 + 0.5z^{-1})}
 \end{equation}
@@ -82,9 +82,9 @@ Then,
     y[n] = \delta[n] - \delta[n - 1] \overset{\mathcal{Z}}{\implies} Y(z) = 1 - z^{-1} = H(z) X(z)
 \end{equation}
 meaning that \(X(z) = 1 - 0.25z^{-2} = (1 - 0.5z^{-1}) (1 + 0.5z^{-1})\).
-By the convolution property of the Z-transform,
+By definition of the \(z\)-transform,
 \begin{equation}
-    x[n] = \left(\left(\frac{1}{2}\right)^n u[n]\right) \ast \left(\left(-\frac{1}{2}\right)^n u[n]\right)
+    x[n] = \delta[n] - \frac{1}{4} \delta[n - 2]
 \end{equation}
 
 \subsection{}
@@ -118,15 +118,13 @@ Meaning that the final output is
     R_y: \frac{1}{2} < |z| < 2
 \end{equation}
 
-%% TODO: this
-
 \subsection{}
 
 Simplifiying \(X(z)\),
 \begin{align}
     X(z) &= \frac{1}{3} \frac{-(1 - 2z^{-1}) + 4 \left(1 - \frac{1}{2} z^{-1}\right)}{\left(1 - \frac{1}{2} z^{-1}\right) (1 - 2z^{-1})} \\
     &= \frac{1}{3} \frac{-1 + \cancel{2z^{-1}} + 4 - \cancel{2z^{-1}}}{\left(1 - \frac{1}{2} z^{-1}\right) (1 - 2z^{-1})} \\
-    &= \frac{1}{\left(1 - \frac{1}{2} z^{-1}\right) (1 - 2z^{-1})}
+    &= \frac{1}{\left(1 - \frac{1}{2} z^{-1}\right) (1 - 2z^{-1})} \\
     \implies Y(z) &= (1 - z^{-2}) X(z) = X(z) - z^{-2} X(z) \\
     \overset{\mathcal{Z}^{-1}}{\implies} y[n] &= x[n] - x[n - 2]
 \end{align}
@@ -142,7 +140,7 @@ Simplifiying \(X(z)\),
 
 \begin{align}
     X(z) &= \frac{z^{-2}}{1 - 2.3z^{-1} + 1.6z^{-2} - 0.3z^{-3}} = \frac{2.04}{1 + 0.3z^{-1}} - \frac{3.47}{1 - z^{-1}} + \frac{1.43}{(1 - z^{-1})^2} \\
-    \overset{\mathcal{Z}^{-1}}{\implies} x[n] &= (-0.3)^n u[n] - 3.47 u[n] + (n + 1) u[n + 1]
+    \overset{\mathcal{Z}^{-1}}{\implies} x[n] &= (-0.3)^n u[n] - 3.47 u[n] + 1.43 (n + 1) u[n + 1]
 \end{align}
 
 \newpage
@@ -196,19 +194,6 @@ Simplifiying \(X(z)\),
             xlabel={\(\frac{\omega}{\pi}\)}, ylabel={\(Z(e^{j \omega})\)},
             title={DTFT of Product},
             axis lines=middle,
-            % xticklabels={
-            %     \(-\frac{5\pi}{2}\),
-            %     \(-2\pi\),
-            %     \(-\frac{3\pi}{2}\),
-            %     \(-\pi\),
-            %     \(-\frac{\pi}{2}\),
-            %     \(0\),
-            %     \(\frac{\pi}{2}\),
-            %     \(\pi\),
-            %     \(\frac{3\pi}{2}\),
-            %     \(2\pi\),
-            %     \(\frac{5\pi}{2}\)
-            % }
         ]
         \addplot[color=blue] table[
             col sep=comma,
@@ -221,7 +206,7 @@ Simplifiying \(X(z)\),
 \subsection{}
 
 \begin{align}
-    Y(e^{j \omega}) &= \pi \sum_{k = -\infty}^\infty \delta\left(\omega - \frac{\pi}{4} + 2\pi k\right) + \delta\left(\omega + \frac{\pi}{4} + 2\pi k\right) + \delta\left(\omega - \frac{3\pi}{4} + 2\pi k\right) \delta\left(\omega + \frac{3\pi}{4} + 2\pi k\right) \\
+    Y(e^{j \omega}) &= \pi \sum_{k = -\infty}^\infty \delta\left(\omega - \frac{\pi}{4} + 2\pi k\right) + \delta\left(\omega + \frac{\pi}{4} + 2\pi k\right) + \delta\left(\omega - \frac{3\pi}{4} + 2\pi k\right) + \delta\left(\omega + \frac{3\pi}{4} + 2\pi k\right) \\
     X(e^{j \omega}) \ast Y(e^{j \omega}) &= \frac{1}{2} \sum_{k \in \Z} \left(X\left(e^{j \left(\omega - \frac{\pi}{2} + 2\pi k\right)}\right) + X\left(e^{j \left(\omega + \frac{\pi}{2} + 2\pi k\right)}\right)\right)
 \end{align}
 \begin{center}
@@ -230,19 +215,6 @@ Simplifiying \(X(z)\),
             xlabel={\(\frac{\omega}{\pi}\)}, ylabel={\(Z(e^{j \omega})\)},
             title={DTFT of Product},
             axis lines=middle,
-            % xticklabels={
-            %     \(-\frac{5\pi}{2}\),
-            %     \(-2\pi\),
-            %     \(-\frac{3\pi}{2}\),
-            %     \(-\pi\),
-            %     \(-\frac{\pi}{2}\),
-            %     \(0\),
-            %     \(\frac{\pi}{2}\),
-            %     \(\pi\),
-            %     \(\frac{3\pi}{2}\),
-            %     \(2\pi\),
-            %     \(\frac{5\pi}{2}\)
-            % }
         ]
         \addplot[color=blue] table[
             col sep=comma,
@@ -264,19 +236,6 @@ Simplifiying \(X(z)\),
             xlabel={\(\frac{\omega}{\pi}\)}, ylabel={\(Z(e^{j \omega})\)},
             title={DTFT of Product},
             axis lines=middle,
-            % xticklabels={
-            %     \(-\frac{5\pi}{2}\),
-            %     \(-2\pi\),
-            %     \(-\frac{3\pi}{2}\),
-            %     \(-\pi\),
-            %     \(-\frac{\pi}{2}\),
-            %     \(0\),
-            %     \(\frac{\pi}{2}\),
-            %     \(\pi\),
-            %     \(\frac{3\pi}{2}\),
-            %     \(2\pi\),
-            %     \(\frac{5\pi}{2}\)
-            % }
         ]
         \addplot[color=blue] table[
             col sep=comma,
@@ -300,19 +259,14 @@ Simplifiying \(X(z)\),
 
 \subsection{}
 
-The Hilbert filter is odd-symmetric, Hermitian, and complex.
+From Table 2.1 of O\&S, the symmetry properties of the DTFT imply that the Hilbert filter impulse response is purely \emph{real and odd}.
 
 \subsection{}
 
 \begin{align}
-    % X(e^{j \omega}) &= \pi \sum_{k \in \Z} \delta(\omega - \omega_0 + 2\pi k) + \delta(\omega + \omega_0 + 2\pi k) \\
-    % Y(e^{j \omega}) = H(e^{j \omega}) X(e^{j \omega}) &= j \pi \sum_{k < 0} \delta(\omega + \omega_0 + 2\pi k) - j \pi \sum_{k > 0} \delta(\omega - \omega_0 + 2\pi k) \\
-    % &= j \pi \frac{1}{2} \left(\left(\sum_{k \in \Z} \delta(\omega + \omega_0 + 2\pi k)\right) - \delta(\omega + \omega_0)\right) - j \pi \frac{1}{2} \left(\left(\sum_{k \in \Z} \delta(\omega - \omega_0 + 2\pi k)\right) - \delta(\omega - \omega_0)\right) \\
-    % &= \frac{j \pi}{2} (-\delta(\omega + \omega_0) + \delta(\omega - \omega_0)) \\
-    % \overset{\mathcal{F}^{-1}}{\implies} y[n] &= -\frac{1}{2} \sin(\omega_0 n)
     X(e^{j \omega}) &= \pi (\delta(\omega - \omega_0) + \delta(\omega + \omega_0)) \\
-    Y(e^{j \omega}) &= j \pi (-\delta(\omega - \omega_0) + \delta(\omega_0)) \\
-    \overset{\mathcal{F}^{-1}}{\implies} y[n] &= 2\sin(\omega_0 n)
+    Y(e^{j \omega}) &= -j \pi (\delta(\omega - \omega_0) - \delta(\omega + \omega_0)) \\
+    \overset{\mathcal{F}^{-1}}{\implies} y[n] &= \sin(\omega_0 n)
 \end{align}
 
 \subsection{}
@@ -322,9 +276,16 @@ The Hilbert filter is odd-symmetric, Hermitian, and complex.
     \begin{cases}
         -X(e^{j \omega}) & \omega \in (-\pi, 0) \\
         0 & \omega = 0 \\
-        X(e^{j \omega}) & \omega \in (0, \pi)
-    \end{cases} = X(e^{j \omega}) (u(\omega) - u(\omega)) \\
-    \overset{\mathcal{F}^{-1}}{\implies} y[n] &= x[n] \ast 
+        -X(e^{j \omega}) & \omega \in (0, \pi)
+    \end{cases} \\
+    &= -X(e^{j \omega}) \overset{\mathcal{F}^{-1}}{\implies} y[n] = -x[n]
 \end{align}
+
+\subsection{}
+
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{q9d.png}
+\end{center}
+where \(\mathcal{H}\) is the Hilbert transform.
 
 \end{document}

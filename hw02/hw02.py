@@ -35,7 +35,7 @@ X_c = 0.5 * (
 with open(Q8_AB_PATH, 'w') as f:
     writer = csv.writer(f)
     writer.writerow(["index", "8a", "8b", "8d"])
-    writer.writerows(zip(indices, X_a, X_b, X_c))
+    writer.writerows(zip(indices, X_a, X_b, X_d))
 
 with open(Q8_C_PATH, 'w') as f:
     writer = csv.writer(f)
