@@ -1,0 +1,184 @@
+\documentclass{article}
+\usepackage{eecstex}
+\usepackage{circledsteps}
+
+\title{EE 123 HW 03}
+\author{Bryan Ngo}
+\date{2022-02-07}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{section}{2}
+
+\section{}
+
+\subsection{}
+
+\(y[n]\) is
+\begin{itemize}
+    \item \(y[n \geqslant L] = 0\) since an autocorrelation implies that the range of nonzero values is \([-L - 1, L - 1]\).
+    \item Conjugate-symmetric since the frequency domain is purely real.
+    \item Odd length since the multiplication of two length \(L\) signals in the frequency domain is the convolution, which creates a length \(2L - 1\).
+\end{itemize}
+
+\subsection{}
+
+Due to the symmetry and convolution properties of the DFT,
+\begin{equation}
+    \bar{y}[n] = x[n] \, \Circled{N} \, x^\ast[-n]
+\end{equation}
+where we want
+\begin{equation}
+    y[n] = \bar{y}[m[n]] = x[n] \ast x^\ast[-n]
+\end{equation}
+Let \(N = 2L - 1\) so that we can capture the entire range of the circular autocorrelation.
+Since circular convolution retains the same indices as the original signals, we now have a signal with range \([0, 2N - 2]\).
+Thus, we must time shift by \(m[n] = n - L - 1\) to correct the range of the signal.
+
+\newpage
+\section{}
+
+\begin{equation}
+    \begin{array}[]{||c|c||}
+        \hline
+        k & X[k] \\
+        \hline
+        0 & 3 \\
+        2 & 0.5 - 4.5j \\
+        4 & 5 \\
+        5 & 3.5 + 3.5j \\
+        7 & -2.5 - 7j \\
+        \hline
+    \end{array}
+\end{equation}
+
+\subsection{}
+
+Using the symmetry properties of the DFT, we can complete the DFT as shown:
+
+\begin{equation}
+    \begin{array}[]{||c|c||}
+        \hline
+        k & X[k] \\
+        \hline
+        0 & 3 \\
+        1 & -2.5 + 7j \\
+        2 & 0.5 - 4.5j \\
+        3 & 3.5 - 3.5j \\
+        4 & 5 \\
+        5 & 3.5 + 3.5j \\
+        6 & 0.5 + 4.5j \\
+        7 & -2.5 - 7j \\
+        \hline
+    \end{array}
+\end{equation}
+meaning that
+\begin{equation}
+    x[0] = \frac{1}{8} \sum_{k = 0}^{N - 1} X[k] = \frac{11}{8}
+\end{equation}
+
+\subsection{}
+
+By the circular convolution and time-shift theorems of the DFT,
+\begin{equation}
+    x[n] \, \Circled{8} \, \delta[n - 1] = e^{-j \frac{2\pi}{8} k} X[k]
+\end{equation}
+
+\subsection{}
+
+Since \(W[k]\) is simply \(X[k]\) evaluated at the even terms, we can represent \(w[n]\) as
+\begin{align}
+    W[k] &= X[2k] = \sum_{n = 0}^7 x[n] W_8^{2kn} \\
+    \overset{\mathcal{F}^{-1}}{\implies} w[n] &= \frac{1}{4} \sum_{k = 0}^3 W[k] W_4^{-kn} = \frac{1}{4} \sum_{k = 0}^3 X[2k] W_4^{-kn} \\
+    &= \frac{1}{4} \sum_{k = 0}^7 \frac{1}{2} (1 + (-1)^k) X[k] W_8^{-kn} = \frac{1}{8} \sum_{k = 0}^7 (1 + e^{-j \pi k}) X[k] W_8^{-kn} \\
+    &= x[n] + \sum_{k = 0}^7 e^{-j \pi k} X[k] W_8^{-kn} \\
+    &= x[n] + \sum_{k = 0}^7 W_8^4 X[k] W_8^{-kn} = x[n] + \sum_{k = 0}^7 X[k] W_8^{-kn + 4} \\
+    &= x[n] + x[(n - 4)_8]
+\end{align}
+
+\newpage
+\section{Faster DFTs?}
+
+Since \(f[n]\) and \(g[n]\) are both purely real, then \(j g[n]\) must be purely imaginary.
+By the linearity of the DFT, \(H[k] = F[k] + j G[k]\).
+We can then express \(F[k]\) and \(G[k]\) as
+\begin{align}
+    F[k] &= \Re\{H[k]\} = \frac{1}{2} (H[k] + H^\ast[k]) \\
+    G[k] &= \Im\{H[k]\} = \frac{1}{2j} (H[k] - H^\ast[k])
+\end{align}
+
+\newpage
+\section{Diagonalizing Circulant Matrices}
+
+\begin{theorem}
+    The DFT matrix diagonalizes all circulant matrices.
+\end{theorem}
+\begin{proof}
+    Let \(\bm{H}\) be a circulant matrix
+    \begin{equation}
+        \bm{H} =
+        \begin{bmatrix}
+            c_1 & c_2 & \cdots & c_{N - 1} & c_N \\
+            c_N & c_1 & \cdots & c_{N - 2} & c_{N - 1} \\
+            \vdots & \vdots & \ddots & \vdots & \vdots \\
+            c_2 & c_3 & \cdots & c_N & c_1
+        \end{bmatrix} =
+        \begin{bmatrix}
+            c[n] \\
+            c[(n - 1)_N] \\
+            \vdots \\
+            c[(n - (N - 1))_N]
+        \end{bmatrix}
+    \end{equation}
+    and \(\bm{D}\) be the \(N \times N\) DFT matrix.
+    Note that the DFT matrix satisfies the following relation: \(\bm{D}^{-1} = \frac{1}{N} \bm{D}^\ast\).
+    Then,
+    \begin{align}
+        \bm{D}^{-1} \bm{H} \bm{D} &=
+        \frac{1}{N} \begin{bmatrix}
+            1 & 1 & \cdots & 1 \\
+            1 & e^{j \frac{2\pi}{N}} & \cdots & e^{j \frac{2\pi}{N} (N - 1)} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            1 & e^{j \frac{2\pi}{N} (N - 1)} & \cdots & e^{j \frac{2\pi}{n} (N - 1) (N - 1)}
+        \end{bmatrix}
+        \begin{bmatrix}
+            c[n] \\
+            c[(n - 1)_N] \\
+            \vdots \\
+            c[(n - (N - 1))_N]
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 1 & \cdots & 1 \\
+            1 & e^{-j \frac{2\pi}{n}} & \cdots & e^{-j \frac{2\pi}{n} (n - 1)} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            1 & e^{-j \frac{2\pi}{n} (n - 1)} & \cdots & e^{-j \frac{2\pi}{n} (n - 1) (n - 1)}
+        \end{bmatrix} \\
+        &=
+        \frac{1}{N} \begin{bmatrix}
+            C[k] \\
+            W_N^{-1} C[k] \\
+            \vdots \\
+            W_N^{-(N - 1)} C[k]
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 1 & \cdots & 1 \\
+            1 & e^{-j \frac{2\pi}{n}} & \cdots & e^{-j \frac{2\pi}{n} (n - 1)} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            1 & e^{-j \frac{2\pi}{n} (n - 1)} & \cdots & e^{-j \frac{2\pi}{n} (n - 1) (n - 1)}
+        \end{bmatrix} \\
+        &=
+        \frac{1}{N} \begin{bmatrix}
+            N C[0] & 0 & \cdots & 0 \\
+            0 & N C[0] & \cdots & 0 \\
+            \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & \cdots & N C[0]
+        \end{bmatrix}
+    \end{align}
+    which is diagonal.
+\end{proof}
+
+% IDFT{X[k]} = 1/N (DFT(X*[k]))*
+
+\end{document}
