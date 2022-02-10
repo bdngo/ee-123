@@ -136,12 +136,12 @@ We can then express \(F[k]\) and \(G[k]\) as
     Note that the DFT matrix satisfies the following relation: \(\bm{D}^{-1} = \frac{1}{N} \bm{D}^\ast\).
     Then,
     \begin{align}
-        \bm{D}^{-1} \bm{H} \bm{D} &=
-        \frac{1}{N} \begin{bmatrix}
+        \bm{D} \bm{H} \bm{D}^{-1} &=
+        \begin{bmatrix}
             1 & 1 & \cdots & 1 \\
-            1 & e^{j \frac{2\pi}{N}} & \cdots & e^{j \frac{2\pi}{N} (N - 1)} \\
+            1 & e^{-j \frac{2\pi}{n}} & \cdots & e^{-j \frac{2\pi}{n} (n - 1)} \\
             \vdots & \vdots & \ddots & \vdots \\
-            1 & e^{j \frac{2\pi}{N} (N - 1)} & \cdots & e^{j \frac{2\pi}{n} (N - 1) (N - 1)}
+            1 & e^{-j \frac{2\pi}{n} (n - 1)} & \cdots & e^{-j \frac{2\pi}{n} (n - 1) (n - 1)}
         \end{bmatrix}
         \begin{bmatrix}
             c[n] \\
@@ -149,24 +149,24 @@ We can then express \(F[k]\) and \(G[k]\) as
             \vdots \\
             c[(n - (N - 1))_N]
         \end{bmatrix}
-        \begin{bmatrix}
+        \frac{1}{N} \begin{bmatrix}
             1 & 1 & \cdots & 1 \\
-            1 & e^{-j \frac{2\pi}{n}} & \cdots & e^{-j \frac{2\pi}{n} (n - 1)} \\
+            1 & e^{j \frac{2\pi}{N}} & \cdots & e^{j \frac{2\pi}{N} (N - 1)} \\
             \vdots & \vdots & \ddots & \vdots \\
-            1 & e^{-j \frac{2\pi}{n} (n - 1)} & \cdots & e^{-j \frac{2\pi}{n} (n - 1) (n - 1)}
+            1 & e^{j \frac{2\pi}{N} (N - 1)} & \cdots & e^{j \frac{2\pi}{n} (N - 1) (N - 1)}
         \end{bmatrix} \\
         &=
-        \frac{1}{N} \begin{bmatrix}
-            C[0] \\
-            W_N^{-1} C[1] \\
-            \vdots \\
-            W_N^{-(N - 1)} C[N - 1]
-        \end{bmatrix}
         \begin{bmatrix}
+            C[0] \\
+            W_N C[1] \\
+            \vdots \\
+            W_N^{N - 1} C[N - 1]
+        \end{bmatrix}
+        \frac{1}{N} \begin{bmatrix}
             1 & 1 & \cdots & 1 \\
-            1 & e^{-j \frac{2\pi}{n}} & \cdots & e^{-j \frac{2\pi}{n} (n - 1)} \\
+            1 & e^{j \frac{2\pi}{N}} & \cdots & e^{j \frac{2\pi}{N} (N - 1)} \\
             \vdots & \vdots & \ddots & \vdots \\
-            1 & e^{-j \frac{2\pi}{n} (n - 1)} & \cdots & e^{-j \frac{2\pi}{n} (n - 1) (n - 1)}
+            1 & e^{j \frac{2\pi}{N} (N - 1)} & \cdots & e^{j \frac{2\pi}{n} (N - 1) (N - 1)}
         \end{bmatrix} \\
         &=
         \frac{1}{N} \begin{bmatrix}
