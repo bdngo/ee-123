@@ -19,8 +19,8 @@
 \(y[n]\) is
 \begin{itemize}
     \item \(y[n \geqslant L] = 0\) since an autocorrelation implies that the range of nonzero values is \([-L - 1, L - 1]\).
-    \item Conjugate-symmetric since the frequency domain is purely real.
-    \item Odd length since the multiplication of two length \(L\) signals in the frequency domain is the convolution, which creates a length \(2L - 1\).
+    \item Conjugate-symmetric since the frequency domain representatio is purely real.
+    \item Odd length since the multiplication of two length \(L\) signals in the frequency domain is the circular convolution, which creates a length \(2L - 1\) signal.
 \end{itemize}
 
 \subsection{}
@@ -76,7 +76,7 @@ Using the symmetry properties of the DFT, we can complete the DFT as shown:
 \end{equation}
 meaning that
 \begin{equation}
-    x[0] = \frac{1}{8} \sum_{k = 0}^{N - 1} X[k] = \frac{11}{8}
+    x[0] = \frac{1}{8} \sum_{k = 0}^7 X[k] = \frac{11}{8}
 \end{equation}
 
 \subsection{}
