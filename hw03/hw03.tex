@@ -35,7 +35,7 @@ where we want
 \end{equation}
 Let \(N = 2L - 1\) so that we can capture the entire range of the circular autocorrelation.
 Since circular convolution retains the same indices as the original signals, we now have a signal with range \([0, 2N - 2]\).
-Thus, we must time shift by \(m[n] = n - L - 1\) to correct the range of the signal.
+Thus, we must time shift by \(m[n] = n + (L - 1)\) to center the signal around 0.
 
 \newpage
 \section{}
@@ -157,10 +157,10 @@ We can then express \(F[k]\) and \(G[k]\) as
         \end{bmatrix} \\
         &=
         \frac{1}{N} \begin{bmatrix}
-            C[k] \\
-            W_N^{-1} C[k] \\
+            C[0] \\
+            W_N^{-1} C[1] \\
             \vdots \\
-            W_N^{-(N - 1)} C[k]
+            W_N^{-(N - 1)} C[N - 1]
         \end{bmatrix}
         \begin{bmatrix}
             1 & 1 & \cdots & 1 \\
@@ -171,12 +171,19 @@ We can then express \(F[k]\) and \(G[k]\) as
         &=
         \frac{1}{N} \begin{bmatrix}
             N C[0] & 0 & \cdots & 0 \\
-            0 & N C[0] & \cdots & 0 \\
+            0 & N C[1] & \cdots & 0 \\
             \vdots & \vdots & \ddots & \vdots \\
-            0 & 0 & \cdots & N C[0]
+            0 & 0 & \cdots & N C[N - 1]
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            C[0] & 0 & \cdots & 0 \\
+            0 & C[1] & \cdots & 0 \\
+            \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & \cdots & C[N - 1]
         \end{bmatrix}
     \end{align}
-    which is diagonal.
+    where we use the circular shift property to rewrite the circulant matrix and use the frequency shift properties of the DFT to prove that the DFT matrix diagonalizes any circulant matrix.
 \end{proof}
 
 % IDFT{X[k]} = 1/N (DFT(X*[k]))*
