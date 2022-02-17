@@ -84,6 +84,10 @@ The order that represents increasing frequency content is the sequency ordering.
 
 \subsection{}
 
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{q5b.png}
+\end{center}
+
 \newpage
 \section{}
 
@@ -138,7 +142,7 @@ The order that represents increasing frequency content is the sequency ordering.
 \subsection{}
 
 \begin{equation}
-    H_4[k] = \sum_{k = 0}^3 h[n] W_4^{kn} = 1 - W_4^k = 1 - e^{j \frac{2\pi}{N} k} = \{0, 1 + j, 2, 1 - j\}
+    H_4[k] = \sum_{k = 0}^3 h[n] W_4^{kn} = 1 - W_4^k = 1 - (-j)^k = \{0, 1 + j, 2, 1 - j\}
 \end{equation}
 \begin{center}
     \begin{tikzpicture}
@@ -162,10 +166,59 @@ The order that represents increasing frequency content is the sequency ordering.
     \end{tikzpicture}
 \end{center}
 The DFT is not even, not odd, is conjugate symmetric.
-The DFT is a high-pass filter since it lets in \(\omega = \pi\), which is the highest frequency.
+The DFT is a high-pass filter since it lets in \(\omega = \pi\), which is the highest frequency, and blocks out \(\omega = 0\), the DC frequency.
 
 \subsection{}
 
+It is not possible to uniquely identify \(x[n]\) since the expression
+\begin{equation}
+    X[k] = \frac{Y[k]}{H[k]}
+\end{equation}
+involves \(H[0] = 0\), so the expression is undefined at \(k = 0\), meaning that
+\begin{equation}
+    X[k] =
+    \begin{cases}
+        C & k \equiv 0 \pmod{4} \\
+        \frac{Y[k]}{1 - (-j)^k} & k \in [1, 3] \pmod{4}
+    \end{cases}
+\end{equation}
+for some \(C \in \C\).
 
+\subsection{}
+
+Using Parseval's theorem for the DFT,
+\begin{align}
+    \sum_{n = 0}^3 |x[n]|^2 &= \frac{1}{4} \sum_{k = 0}^3 |X[k]|^2 = D \\
+    &= \frac{1}{4} \left(|X[0]|^2 + |X[1]|^2 + |X[2]|^2 + |X[3]|^2\right) \\
+    \implies X[k] &=
+    \begin{cases}
+        \pm \sqrt{4D - \frac{1}{\sqrt{2}} |Y[1]|^2 - \frac{1}{2} |Y[2]|^2 - \frac{1}{\sqrt{2}} |Y[3]|^2} & k \equiv 0 \pmod{4} \\
+        \frac{Y[k]}{1 - (-j)^k} & k \in [1, 3] \pmod{4}
+    \end{cases}
+\end{align}
+
+\subsection{}
+
+Using the frequency shift property of the DFT,
+\begin{equation}
+    \tilde{Y}[k] = X[k] \tilde{H}[(k + 1)_N]
+\end{equation}
+Assuming nothing else about \(x[n]\),
+\begin{equation}
+    X[k] =
+    \begin{cases}
+        \frac{Y[k]}{1 - (-j)^{k + 1}} & k \in [0, 2] \pmod{4} \\
+        C & k \equiv 3 \pmod{4}
+    \end{cases}
+\end{equation}
+for \(C \in \C\).
+Assuming the sum holds from the previous part,
+\begin{equation}
+    X[k] =
+    \begin{cases}
+        \frac{Y[k]}{1 - (-j)^{k + 1}} & k \in [0, 2] \pmod{4} \\
+        \pm \sqrt{4D - \frac{1}{\sqrt{2}} |Y[0]|^2 - \frac{1}{2} |Y[1]|^2 - \frac{1}{\sqrt{2}} |Y[2]|^2} & k \equiv 3 \pmod{4} \\
+    \end{cases}
+\end{equation}
 
 \end{document}
